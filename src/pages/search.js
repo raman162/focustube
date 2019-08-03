@@ -1,6 +1,6 @@
 import React from "react"
 import axios from "axios"
-import { navigate } from "gatsby"
+import { navigate, Link } from "gatsby"
 
 export default class Search extends React.Component {
 
@@ -86,16 +86,16 @@ export default class Search extends React.Component {
           :
           <div>
             {results.map((result) => (
-              <a
-                href={`https://youtube.com/watch?v=${result.id.videoId}`}
+              <Link
+                to={`/watch?v=${result.id.videoId}`}
                 key={result.id.videoId}>
                 <div>
                   <div>{result.id.videoId} | {result.snippet.title}</div>
                   <img
-                    src={result.snippet.thumbnails.high.url}
-                    style={{width: '500px'}}/>
+                    src={result.snippet.thumbnails.medium.url}
+                    style={{width: '300px'}}/>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         }
