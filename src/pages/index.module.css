@@ -1,0 +1,26 @@
+.index-container{
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.index-header{
+  text-align: center;
+  margin: 10px 0;
+}
+
+.index-content{
+  max-width: 600px;
+}
+
+.description{
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.form-container{
+  display: flex;
+  justify-content: center;
+}

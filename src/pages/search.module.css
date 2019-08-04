@@ -1,0 +1,22 @@
+.search-container{
+  max-width: 800px;
+  padding: 0 10px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.search-form{
+  margin-bottom: 10px;
+}
+
+.header{
+  margin: 5px 0;
+}
+
+.show-results-text{
+  margin-bottom: 10px;
+}
+
+.load-more{
+  margin-bottom: 20px;
+}

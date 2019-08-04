@@ -1,6 +1,9 @@
 import React from "react"
 import axios from "axios"
 import { navigate, Link } from "gatsby"
+import searchStyles from "./search.module.css"
+import Layout from "../components/layout.js"
+import SearchResult from "../components/search_result.js"
 
 export default class Search extends React.Component {
 
@@ -102,51 +105,57 @@ export default class Search extends React.Component {
     const showLoadExtra = !loadingExtraResults &&
                                 nextPageToken !== null &&
                                   nextPageToken !== undefined
+    const showResultDescription = lastSearchQuery !== "" &&
+                                    lastSearchQuery !== null &&
+                                      lastSearchQuery !== undefined
     return(
-      <div>
-        <form>
-          <input
-            onChange={this.onQueryChange}
-            placeholder="Search for videos"
-            value={query}/>
-          <button
-            type='submit'
-            disabled={searchDisabled}
-            onClick={this.onSearch}>
-            Search
-          </button>
-        </form>
-        <h1>Showing results for "{lastSearchQuery}"</h1>
-        {loading ?
-          <div>Loading Results...</div>
-          :
-          <div>
-            {results.map((result) => (
-              <Link
-                to={`/watch?v=${result.id.videoId}`}
-                key={result.id.videoId}>
-                <div>
-                  <div>{result.id.videoId} | {result.snippet.title}</div>
-                  <img
-                    src={result.snippet.thumbnails.medium.url}
-                    style={{width: '300px'}}
-                    alt='thumbnail'
-                  />
+      <Layout>
+        <div className={searchStyles.searchContainer}>
+          <h1 className={searchStyles.header}>FocusTube</h1>
+          <form className={searchStyles.searchForm}>
+            <input
+              onChange={this.onQueryChange}
+              placeholder="Search for videos"
+              value={query}/>
+            <button
+              type='submit'
+              disabled={searchDisabled}
+              onClick={this.onSearch}>
+              Search
+            </button>
+          </form>
+          {showResultDescription &&
+            <div className={searchStyles.showResultsText}>
+              Showing results for "{lastSearchQuery}"
+            </div>
+          }
+          {loading ?
+            <div>
+              Loading Results...
+            </div>
+            :
+            <div>
+              {results.map((result) => (
+                <SearchResult
+                  key={result.id.videoId}
+                  result={result}/>
+              ))}
+              {showLoadExtra &&
+                <button
+                  onClick={this.loadExtraResults}
+                  className={searchStyles.loadMore}>
+                  Load More
+                </button>
+              }
+              {loadingExtraResults &&
+                <div className={searchStyles.loadMore}>
+                  Loading More Results...
                 </div>
-              </Link>
-            ))} 
-            {showLoadExtra &&
-              <button
-                onClick={this.loadExtraResults}>
-                Load More
-              </button>
-            }
-            {loadingExtraResults &&
-              <div>Loading More Results...</div>
-            }
-          </div>
-        }
-      </div>
+              }
+            </div>
+          }
+        </div>
+      </Layout>
     )
   }
 
