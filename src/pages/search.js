@@ -11,10 +11,12 @@ export default class Search extends React.Component {
       loading: query != '',
       results: [],
       query: query,
-      initSearchQuery: query
+      initSearchQuery: query,
+      loadingExtraResults: false
     }
     this.onQueryChange = this.onQueryChange.bind(this)
     this.onSearch = this.onSearch.bind(this)
+    this.loadExtraResults = this.loadExtraResults.bind(this)
   }
 
   currentQueryParam() {
@@ -53,19 +55,53 @@ export default class Search extends React.Component {
         part: 'snippet',
         q: query,
         key: process.env.GATSBY_YOUTUBE_API_KEY,
-        type: 'video'
+        type: 'video',
+        maxResults: '10'
       }
     }).then((response) => {
       this.setState({
-        results: response.data.items,
+        results: response.data.items || [],
+        totalResults: response.data.pageInfo.totalResults,
+        nextPageToken: response.data.nextPageToken,
         loading: false
       })
     })
   }
 
+  loadExtraResults(event) {
+    this.setState({loadingExtraResults: true})
+    const {query, nextPageToken} = this.state
+    axios.get('https://www.googleapis.com/youtube/v3/search', {
+      params: {
+        part: 'snippet',
+        q: query,
+        key: process.env.GATSBY_YOUTUBE_API_KEY,
+        type: 'video',
+        maxResults: '10',
+        pageToken: nextPageToken
+      }
+    }).then((response) => {
+      this.setState((prevState) => {
+        const results = prevState.results.concat(response.data.items)
+        return {
+          results: results,
+          totalResults: response.data.pageInfo.totalResults,
+          nextPageToken: response.data.nextPageToken,
+          loadingExtraResults: false
+        }
+      })
+    })
+  }
+
   render() {
-    const {lastSearchQuery, query, results, loading} = this.state
-    const searchDisabled = query == '' || query == lastSearchQuery
+    const {
+      lastSearchQuery, query, results, loading,
+      loadingExtraResults, nextPageToken
+    } = this.state
+    const searchDisabled = query === '' || query === lastSearchQuery
+    const showLoadExtra = !loadingExtraResults &&
+                                nextPageToken !== null &&
+                                  nextPageToken !== undefined
     return(
       <div>
         <form>
@@ -80,8 +116,8 @@ export default class Search extends React.Component {
             Search
           </button>
         </form>
-        <h1>Search Results for query: {lastSearchQuery}</h1>
-        {this.state.loading ?
+        <h1>Showing results for "{lastSearchQuery}"</h1>
+        {loading ?
           <div>Loading Results...</div>
           :
           <div>
@@ -93,10 +129,21 @@ export default class Search extends React.Component {
                   <div>{result.id.videoId} | {result.snippet.title}</div>
                   <img
                     src={result.snippet.thumbnails.medium.url}
-                    style={{width: '300px'}}/>
+                    style={{width: '300px'}}
+                    alt='thumbnail'
+                  />
                 </div>
               </Link>
-            ))}
+            ))} 
+            {showLoadExtra &&
+              <button
+                onClick={this.loadExtraResults}>
+                Load More
+              </button>
+            }
+            {loadingExtraResults &&
+              <div>Loading More Results...</div>
+            }
           </div>
         }
       </div>

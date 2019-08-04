@@ -2,10 +2,6 @@ import React from "react"
 
 export default class Watch extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const urlParams = new URLSearchParams(this.props.location.search)
     const videoId = urlParams.get('v') || ''
