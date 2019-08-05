@@ -109,7 +109,9 @@ export default class Search extends React.Component {
                                   nextPageToken !== undefined
     const showResultDescription = lastSearchQuery !== "" &&
                                     lastSearchQuery !== null &&
-                                      lastSearchQuery !== undefined
+                                      lastSearchQuery !== undefined &&
+                                        totalResults !== null &&
+                                          totalResults !== undefined
     const resultCount = results.length
     return(
       <Layout>
