@@ -26,11 +26,11 @@ export default class Index extends React.Component {
   onSearch(event) {
     event.preventDefault()
     const {query} = this.state
-    navigate(`/search?query=${encodeURIComponent(query)}`)
+    navigate(`/results?search_query=${encodeURIComponent(query)}`)
   }
 
   render() {
-    const {results, query} = this.state
+    const {query} = this.state
     const {data} = this.props
     const searchDisabled = query === ''
     return(

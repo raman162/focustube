@@ -1,4 +1,4 @@
-.search-container{
+.container{
   max-width: 800px;
   padding: 0 10px;
   width: 100%;
@@ -6,7 +6,7 @@
   box-sizing: border-box;
 }
 
-.search-form{
+.form{
   margin-bottom: 10px;
 }
 
