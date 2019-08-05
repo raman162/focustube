@@ -31,7 +31,7 @@ export default ({ children }) => {
           content={data.site.siteMetadata.keywords}/>
         <meta
           name="viewport"
-          content="width=device-width, initial-scale=1"/>
+          content="width=device-width,initial-scale=1,maximum-scale=1"/>
       </Helmet>
       <style dangerouslySetInnerHTML={{__html: `
         body, html{
