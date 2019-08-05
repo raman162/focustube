@@ -29,6 +29,9 @@ export default ({ children }) => {
         <meta
           name="keywords"
           content={data.site.siteMetadata.keywords}/>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"/>
       </Helmet>
       <style dangerouslySetInnerHTML={{__html: `
         body, html{
