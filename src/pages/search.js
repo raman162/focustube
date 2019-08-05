@@ -1,6 +1,7 @@
 import React from "react"
+import { Helmet } from "react-helmet"
 import axios from "axios"
-import { navigate, Link } from "gatsby"
+import { navigate } from "gatsby"
 import searchStyles from "./search.module.css"
 import Layout from "../components/layout.js"
 import SearchResult from "../components/search_result.js"
@@ -99,8 +100,9 @@ export default class Search extends React.Component {
   render() {
     const {
       lastSearchQuery, query, results, loading,
-      loadingExtraResults, nextPageToken
+      loadingExtraResults, nextPageToken, totalResults
     } = this.state
+    const { data } = this.props
     const searchDisabled = query === '' || query === lastSearchQuery
     const showLoadExtra = !loadingExtraResults &&
                                 nextPageToken !== null &&
@@ -108,10 +110,19 @@ export default class Search extends React.Component {
     const showResultDescription = lastSearchQuery !== "" &&
                                     lastSearchQuery !== null &&
                                       lastSearchQuery !== undefined
+    const resultCount = results.length
     return(
       <Layout>
+        <Helmet>
+          <title>Search {data.site.siteMetadata.title}</title>
+        </Helmet>
         <div className={searchStyles.searchContainer}>
-          <h1 className={searchStyles.header}>FocusTube</h1>
+          <h1 className={searchStyles.header}>
+            {data.site.siteMetadata.title}
+          </h1>
+          <div className={searchStyles.description}>
+            {data.site.siteMetadata.description}
+          </div>
           <form className={searchStyles.searchForm}>
             <input
               onChange={this.onQueryChange}
@@ -126,7 +137,8 @@ export default class Search extends React.Component {
           </form>
           {showResultDescription &&
             <div className={searchStyles.showResultsText}>
-              Showing results for "{lastSearchQuery}"
+              Showing {resultCount} out of {totalResults} results
+              for "{lastSearchQuery}"
             </div>
           }
           {loading ?
@@ -160,3 +172,14 @@ export default class Search extends React.Component {
   }
 
 }
+
+export const query = graphql`
+  query {
+    site {
+      siteMetadata {
+        title
+        description
+      }
+    }
+  }
+`

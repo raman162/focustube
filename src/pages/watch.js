@@ -1,15 +1,20 @@
 import React from "react"
+import { Helmet } from "react-helmet"
 import Layout from "../components/layout.js"
 
 export default class Watch extends React.Component {
 
   render() {
+    const { data } = this.props
     const urlParams = new URLSearchParams(this.props.location.search)
     const videoId = urlParams.get('v') || ''
     const src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
     const allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     return (
       <Layout>
+        <Helmet>
+          <title>Watch {data.site.siteMetadata.title}</title>
+        </Helmet>
         <div style={{height: '100vh'}}>
           <iframe
             name="youtube-video-player"
@@ -24,6 +29,14 @@ export default class Watch extends React.Component {
       </Layout>
     )
   }
-
 }
 
+export const query = graphql`
+  query {
+    site {
+      siteMetadata {
+        title
+      }
+    }
+  }
+`

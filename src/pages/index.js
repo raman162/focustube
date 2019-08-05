@@ -1,5 +1,5 @@
 import React from "react"
-import { navigate } from "gatsby"
+import { graphql, navigate } from "gatsby"
 import indexStyles from "./index.module.css"
 import Layout from "../components/layout.js"
 
@@ -31,16 +31,17 @@ export default class Index extends React.Component {
 
   render() {
     const {results, query} = this.state
+    const {data} = this.props
     const searchDisabled = query === ''
     return(
       <Layout>
         <div className={indexStyles.indexContainer}>
           <div>
             <h1 className={indexStyles.indexHeader}>
-              FocusTube
+              {data.site.siteMetadata.title}
             </h1>
             <div className={indexStyles.description}>
-              Search videos on youtube without being distracted
+              {data.site.siteMetadata.description}
             </div>
             <div className={indexStyles.formContainer}>
               <form>
@@ -63,3 +64,14 @@ export default class Index extends React.Component {
     )
   }
 }
+
+export const query = graphql`
+  query {
+    site {
+      siteMetadata {
+        title
+        description
+      }
+    }
+  }
+`
