@@ -1,7 +1,7 @@
 import React from "react"
 import { Helmet } from "react-helmet"
 import axios from "axios"
-import { navigate } from "gatsby"
+import { navigate, Link } from "gatsby"
 import searchStyles from "./search.module.css"
 import Layout from "../components/layout.js"
 import SearchResult from "../components/search_result.js"
@@ -119,9 +119,11 @@ export default class Search extends React.Component {
           <title>Search {data.site.siteMetadata.title}</title>
         </Helmet>
         <div className={searchStyles.searchContainer}>
-          <h1 className={searchStyles.header}>
-            {data.site.siteMetadata.title}
-          </h1>
+          <Link to="/" className={searchStyles.headerLink}>
+            <h1 className={searchStyles.header}>
+              {data.site.siteMetadata.title}
+            </h1>
+          </Link>
           <div className={searchStyles.description}>
             {data.site.siteMetadata.description}
           </div>
