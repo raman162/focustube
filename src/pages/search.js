@@ -12,7 +12,7 @@ export default class Search extends React.Component {
     super(props)
     let query = this.currentQueryParam()
     this.state = {
-      loading: query != '',
+      loading: query !== '',
       results: [],
       query: query,
       initSearchQuery: query,
@@ -29,7 +29,7 @@ export default class Search extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.query != ''){this.fetchResults()}
+    if (this.state.query !== ''){this.fetchResults()}
   }
 
   onQueryChange(event) {
@@ -46,7 +46,7 @@ export default class Search extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const prevUrlParams = new URLSearchParams(prevProps.location.search)
     const prevQuery = prevUrlParams.get('query') || ''
-    if (prevQuery != this.currentQueryParam()) {
+    if (prevQuery !== this.currentQueryParam()) {
       this.setState({query: this.currentQueryParam()}, ()=> this.fetchResults())
     }
   }
