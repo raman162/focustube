@@ -4,8 +4,20 @@ import Layout from "../components/layout.js"
 
 export default class Watch extends React.Component {
 
+  constructor(props) {
+    super(props)
+    this.state={
+      mounted: false
+    }
+  }
+
+  componentDidMount() {
+    this.setState({mounted: true})
+  }
+
   render() {
     const { data } = this.props
+    const { mounted } = this.state
     const urlParams = new URLSearchParams(this.props.location.search)
     const videoId = urlParams.get('v') || ''
     const src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`
@@ -16,15 +28,17 @@ export default class Watch extends React.Component {
           <title>Watch {data.site.siteMetadata.title}</title>
         </Helmet>
         <div style={{height: '100vh'}}>
-          <iframe
-            name="youtube-video-player"
-            title="youtube-video-player"
-            width="100%"
-            height="100%"
-            src={src}
-            frameborder="0"
-            allow={allow}
-            allowfullscreen="true"/>
+          {mounted &&
+            <iframe
+              name="youtube-video-player"
+              title="youtube-video-player"
+              width="100%"
+              height="100%"
+              src={src}
+              frameborder="0"
+              allow={allow}
+              allowfullscreen="true"/>
+           }
         </div>
       </Layout>
     )
